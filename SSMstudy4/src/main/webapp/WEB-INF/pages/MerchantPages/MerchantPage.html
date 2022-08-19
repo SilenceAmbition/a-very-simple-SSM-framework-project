@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<!-- 修改按钮的js函数的调用关系  addTdButton{modifyButton{submitData{mSubmit},isTd}}
+ 写修改按钮的思路：按钮被点击执行modifyButton方法，用户输入结束执行submitData方法，判断用户输入的内容用isTd方法 然后根据不同的内容将数据写入到指定的输入框，最后提交from表单 -->
+<head>
+    <meta charset="UTF-8">
+    <title>商家中心</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script type="text/javascript">
+    function DeleteGoods(idId) { //弹出一个窗口，用于确定是否删除商品 ,点确定则删除商品
+        var alert_bg = document.createElement('div');//用于背景颜色设置
+        alert_box = document.createElement('div'),  //用于控制盒子大小、背景颜色上下边距
+        alert_text = document.createElement('div'),//用于显示用户传入的文字
+        alert_btn = document.createElement('div'),//用于点击事件
+        btn1 = document.createElement('button'),
+        btn2 = document.createElement('button'),
+        textNode = document.createTextNode('确定删除此商品？'), //如果没有data，在调用alert时不传入参数会报错
+        btnText = document.createTextNode('确 定');
+        btnText1 = document.createTextNode('取 消');
+        // 控制样式
+        btn1.style.backgroundColor="white";
+        btn2.style.backgroundColor="white";
+        btn1.style.marginLeft="6px";
+        btn2.style.marginLeft="60px";
+        css(alert_bg, {
+            'position': 'fixed',
+            'top': '0',
+            'left': '0',
+            'right': '0',
+            'bottom': '0',
+            'background-color': 'rgba(0, 0, 0, 0.1)',
+            'z-index': '999999999'
+        });
+        css(alert_box, {
+            'width': '270px',
+            'max-width': '90%',
+            'font-size': '16px',
+            'text-align': 'center',
+            'background-color': '#fff',
+            'border-radius': '15px',
+            'position': 'absolute',
+            'top': '50%',
+            'left': '50%',
+            'transform': 'translate(-50%, -50%)'
+        });
+        css(alert_text, {
+            'padding': '10px 15px',
+            'border-bottom': '1px solid #ddd'
+        });
+        css(alert_btn, {
+            'padding': '10px 0',
+            'color': '#007aff',
+            'font-weight': '600',
+            'cursor': 'pointer'
+        });
+        // 内部结构套入
+        alert_text.appendChild(textNode);
+        btn1.appendChild(btnText);
+        btn2.appendChild(btnText1);
+        alert_btn.appendChild(btn1);
+        alert_btn.appendChild(btn2);
+        alert_box.appendChild(alert_text);
+        alert_box.appendChild(alert_btn);
+        alert_bg.appendChild(alert_box);
+        // 总体显示到页面内
+        document.getElementsByTagName('body')[0].appendChild(alert_bg);
+        // 取消按钮的事件
+        btn2.onclick = function() {
+            alert_bg.parentNode.removeChild(alert_bg);  //删除弹出的窗口
+        }
+        // 确定按钮的事件 删除商品所在行
+        btn1.onclick = function() {
+            alert_bg.parentNode.removeChild(alert_bg);
+            //先将将要删除的商品的id发送到后端
+            var nameInput=document.getElementById("deleteId");//获得HTML中form表单中的输入框
+            nameInput.value=document.getElementById(idId).innerHTML;     //将id写入到input
+            var form1=document.getElementById("deleteForm"); //获得HTML中的form表单
+            form1.submit();
+        }
+    }
+    function css(targetObj, cssObj) {
+        var str = targetObj.getAttribute("style") ? targetObj.getAttribute('style') : '';
+        for (var i in cssObj) {
+            str += i + ':' + cssObj[i] + ';';
+        }
+        targetObj.style.cssText = str;
+    }
+        $(document).ready(function(){       //当html加载结束就会执行这个js  实现从数据库搜索多条数据写入到HTML页面：当HTML加载时就会从数据库查找数据并输出到页面中
+            var m = document.getElementById("in").value;//根据id获得HTML中的对象的value值
+            var m2=m.slice(1,m.length-1)          //去除两端的[]
+            var n=m2.split(" ");                      //将字符串按空格分割成一个字符串数组
+            var tab=document.getElementById("tab");//获得table
+            var i=0;
+            while(n[i]!=undefined){             //这个for循环实现在table中添加多行数据，循环添加写入数据
+                var tabRows = tab.rows;                 //获得table现在的行数
+                var newTr = tab.insertRow(tabRows.length);//在现有行数后面新增一行
+                newTr.style.backgroundColor="rgba(0, 128, 0, 0.1)";//设置样式
+                newTr.style.fontSize="15px";
+                for(var j=0;j<5;j++){                   //这个for循环实现在在一行中添加多个单元格数据，循环添加写入数据
+                    if(n[i+j]!=undefined){          //undefined表示未定义的数据
+                        if(j==4){n[i+j]=n[i+j].replace(',',"");}    //replace替换指定字符串，但不改变原字符串数组
+                        if(j==0){
+                            var newTd = newTr.insertCell(j);        //在tr中第j个位置插入单元格
+                            newTd.id=i+j;
+                            newTd.style.textIndent="10px";
+                            newTd.innerHTML=n[i+j];                 //td中写入内容
+                        }else{
+                            var newTd = newTr.insertCell(j);
+                            newTd.id=i+j;
+                            newTd.style.textIndent="50px";
+                            newTd.innerHTML=n[i+j];}
+                    }
+                }
+                addTdButton(newTr,i+j-2,i+j-3,i+j-4,i+j-5);             //在行后面添加一个修改按钮
+                addDeleteButton(newTr,i+j-5);                     //在行后面添加一个删除按钮
+                i=i+j;
+            }
+            addGoodsButton(tab);
+        });
+        //在指定tr的后面添加一个带修改按钮的td
+        function addTdButton(newTr,one,two,three,four){
+                var tdButton = document.createElement("td");   //创建td
+                tdButton.style.textAlign="center";
+                var but = document.createElement("button");     //创建按钮
+                but.style.backgroundColor="rgba(0, 128, 0, 0.1)";
+                but.innerHTML="修改";
+                but.onclick=function(){modifyGoods(one,two,three,four);modifyGoods(two,one,three,four);modifyGoods(three,two,one,four);};
+                tdButton.appendChild(but);          //将按钮添加到td中
+                newTr.appendChild(tdButton);//将td添加到tr中，重复添加同样的结点会失败
+        }
+        //在指定tr的后面添加一个带删除按钮的td
+        function addDeleteButton(newTr,idId){
+            var tdButton = document.createElement("td");//创建td
+            tdButton.style.textAlign="center";
+            var but = document.createElement("button");//创建按钮
+            but.style.backgroundColor="rgba(0, 128, 0, 0.1)";
+            but.innerHTML="删除";
+            but.onclick=function(){DeleteGoods(idId);};
+            tdButton.appendChild(but);
+            newTr.appendChild(tdButton);
+        }
+        //如何将输入框的数据提交到后台？在html中创建一个from，用js获得form，然后将input放入form中，在form实现提交数据
+        function modifyGoods(tdId,two,three,four){//按钮的修改事件，但只改变一个td。单击按钮，每个td中的文本都变成输入框，当用户按enter键则表示输入结束，输入框又变成文字并提交数据
+            var tdName=document.getElementById(tdId);
+            var n=tdName.innerHTML;                 //获得td原有的数据
+            if(tdName.childNodes[0].nodeType==3){          //nodeType节点类型判断，常用返回值：(form)元素节点返回1，属性节点返回2，文本节点返回3
+                var inp = document.createElement("input");//创建一个input
+                inp.value=n;
+                inp.onkeydown=function(){var x = event.keyCode;//onkeydown键盘的按下事件   x是按下的键的代码，13指enter键
+                    if(x==13){
+                        submitData(tdName,inp.value,tdId,two,three,four);//当用户按enter键则表示输入结束，输入框又变成文字并提交数据
+                    }
+                };
+                tdName.replaceChild(inp, tdName.childNodes[0]);//替换结点，inp是新结点，将文本变成输入框
+            }
+        }
+        //inp.replaceChild(form1, inp.childNodes[0]);执行这个方法会把原有的form1删除
+        //判断这个td是什么内容
+        function isTd(tdId){
+            if((tdId-1)%5==0){return "name";}
+            if((tdId-2)%5==0){return "price";}
+            if((tdId-3)%5==0){return "surplus";}
+            if(tdId%5==0){return "id";}
+        }
+        //将一个输入框用户的输入写入到form中
+        function writeInput(tdId){
+            var nameInput=document.getElementById(isTd(tdId));//获得HTML中form表单中的输入框
+            if(tdId%5==0){nameInput.value=document.getElementById(tdId).innerHTML;return "";}
+            nameInput.value=document.getElementById(tdId).childNodes[0].value;            //写入数据
+        }
+        //提交数据，将输入框变为文字
+        function submitData(tdName,inpValue,tdId,two,three,four){
+            writeInput(tdId);               //同时向form写入四个输入框中的数据，然后提交
+            writeInput(two);
+            writeInput(three);
+            writeInput(four);
+            tdName.removeChild(tdName.childNodes[0]);   //删除输入框
+            tdName.innerHTML=inpValue;             //在td中写入输入框中的数据
+            var form1=document.getElementById("form1"); //获得HTML中的form表单
+            form1.submit();
+        }
+        //在指定table的后面添加一个增加商品的按钮
+        function addGoodsButton(tab){
+            var tabRows = tab.rows;                 //获得table现在的行数
+            var newTr = tab.insertRow(tabRows.length);//在现有行数后面新增一行
+            newTr.style.backgroundColor="rgba(0, 128, 0, 0.1)";//设置样式
+            newTr.style.fontSize="15px";
+            var tdButton = document.createElement("td");//创建td
+            tdButton.style.textAlign="center";
+            var but = document.createElement("button");//创建按钮
+            but.style.backgroundColor="rgba(0, 128, 0, 0.1)";
+            but.innerHTML="添加商品";
+            but.onclick=function(){addGoods(newTr);};
+            tdButton.appendChild(but);
+            newTr.appendChild(tdButton);
+        }
+        function addGoods(newTr){//创建td,创建input，写input的enter事件(提交三个input的数据，并将input删除在td写入数据)，将input添加到td,
+            newTr.removeChild(newTr.childNodes[0]);
+            var tdId = document.createElement("td");
+            var tdName = document.createElement("td");
+            var tdPrice = document.createElement("td");
+            var tdSurplus = document.createElement("td");
+            var tdMerchantName = document.createElement("td");
+            var name = document.createElement("input");
+            tdName.appendChild(name);
+            var price = document.createElement("input");
+            tdPrice.appendChild(price);
+            var surplus = document.createElement("input");
+            tdSurplus.appendChild(surplus);
+            newTr.appendChild(tdId);newTr.appendChild(tdName);newTr.appendChild(tdPrice);newTr.appendChild(tdSurplus);newTr.appendChild(tdMerchantName);
+            addGoodsSubmit(tdName,name);
+            addGoodsSubmit(tdPrice,price);
+            addGoodsSubmit(tdSurplus,surplus);
+        }
+        function addGoodsSubmit(td,inp){ //指定td中input的enter事件
+            inp.onkeydown=function(){   //每输入一个字符就会执行这个方法
+                var x = event.keyCode;//onkeydown键盘的按下事件   x是按下的键的代码，13指enter键
+                if(x==13){
+                    //当用户按enter键则表示输入结束，输入框又变成文字并提交数据
+                    addSubmit(td);
+                }
+            };
+        }
+        function addSubmit(td){
+            var td1=td.parentNode.childNodes[1];
+            var td2=td.parentNode.childNodes[2];
+            var td3=td.parentNode.childNodes[3];
+            var nameInput1=document.getElementById("addName");//获得HTML中form表单中的输入框
+            nameInput1.value=td1.childNodes[0].value;            //写入数据
+            var nameInput2=document.getElementById("addPrice");
+            nameInput2.value=td2.childNodes[0].value;
+            var nameInput3=document.getElementById("addSurplus");
+            nameInput3.value=td3.childNodes[0].value;
+            var form1=document.getElementById("addForm"); //获得HTML中的form表单
+            form1.submit();
+        }
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td style="font-size:15px" >当前时间：2022年7月</td>
+            <td style="text-indent:1500px;font-size:15px">
+                <a th:href="@{/}">主页</a></td>  <!--加花括号和th是因为这里的地址是从浏览器端访问，路径要变一下 -->
+            <td style="text-indent:40px;font-size:15px"><a th:href="@{/MerchantFeedback}" target="_blank">反馈</a></td>    <!-- text-indent左缩进-->
+        </tr>
+    </table><br><br><br>
+    <input type="hidden" th:value="${session.mGoodsList}" id="in"> <!-- 获得数据  session.goodsList等于session.goodsList.toString()-->
+    <table style="" align="center" cellpadding="10" width="1200" id="tab">
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.25)">
+            <td style="text-indent:10px">序号</td>
+            <td style="text-indent:50px">名称</td>
+            <td style="text-indent:50px">价格</td>
+            <td style="text-indent:50px">余量</td>
+            <td style="text-indent:50px">商家</td>
+            <td></td><td></td>
+        </tr>
+    </table>
+    <form th:action="@{/Merchant/ModifyGoods}" method="post" target="_self" id="form1"> <!-- 用于修改商品提交数据的表单-->
+        <input id="id" type="hidden" name="id">         <!--隐藏的input用于提交数据，因为不知道在js中如何正确的设置表单的action值-->
+        <input id="name" type="hidden" name="name">
+        <input id="price" type="hidden" name="price">
+        <input id="surplus" type="hidden" name="surplus">
+    </form>
+    <form th:action="@{/Merchant/DeleteGoods}" method="post" target="_self" id="deleteForm"><!-- 用于删除商品提交数据的表单-->
+        <input id="deleteId" type="hidden" name="id">
+    </form>
+    <form th:action="@{/Merchant/AddGoods}" method="post" target="_self" id="addForm"><!-- 用于增加商品提交数据的表单-->
+        <input id="addName" type="hidden" name="name">
+        <input id="addPrice" type="hidden" name="price">
+        <input id="addSurplus" type="hidden" name="surplus">
+    </form>
+
+</body>
+</html>

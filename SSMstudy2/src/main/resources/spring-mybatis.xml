@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD config 3.0//EN//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 其他东西复制即可  -->
+<configuration>
+    <!-- 配置别名，将包下的所有类都起别名，别名为类名，不区分大小写，在映射文件中需要写类的路径的地方直接用别名即可 -->
+    <typeAliases><package name="com.entity"/></typeAliases>         <!-- 标签有顺序，顺序不对会报错，具体顺序看报错提示即可  -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/database?serverTimezone=GMT"/>  <!-- database是自己的数据库名*********  -->
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/mapper/GoodsMapper.xml"/>         <!-- 对应映射文件xml文件的全类名，注意要用/,其他内容复制即可  -->
+    </mappers>
+
+</configuration>
+

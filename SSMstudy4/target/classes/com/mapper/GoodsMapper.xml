@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 上面的东西复制即可  -->
+<mapper namespace="com.mapper.GoodsMapper">   <!-- 接口的全类名  -->
+
+    <select id="search" resultType="com.entity.Goods">                          <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        select * from Goods
+    </select>
+    <select id="Msearch" resultType="com.entity.Goods">
+        select * from Goods where merchantName=#{merchantName}
+    </select>
+    <update id="updateGoods">
+        update goods set name=#{name},price=#{price},surplus=#{surplus} where id=#{id};
+    </update>
+    <delete id="deleteGoods">
+        delete from goods where id=#{id};
+    </delete>
+    <insert id="addGoods">
+        insert into goods set id=#{id},name=#{name},price=#{price},surplus=#{surplus},merchantName=#{merchantName};
+    </insert>
+    <select id="merchantNameSort" resultType="com.entity.Goods">                          <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        select * from goods order by merchantName asc;
+    </select>
+    <select id="goodsNameSort" resultType="com.entity.Goods">                          <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        select * from goods order by name asc;
+    </select>
+    <select id="VisitsSort" resultType="com.entity.Goods">                          <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        select * from goods order by Visits asc;
+    </select>
+</mapper>

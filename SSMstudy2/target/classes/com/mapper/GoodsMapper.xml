@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 上面的东西复制即可  -->
+<mapper namespace="com.mapper.GoodsMapper">   <!-- 接口的全类名  -->
+    <insert id="addGoods">                      <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        insert into Goods set id=8,name='苦瓜',price='2元/斤',surplus='70斤',shopername='老王'
+    </insert>
+    <insert id="addMerchants">                      <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        insert into Merchants set id=8,name='苦瓜',password='2元/斤'
+    </insert>
+    <select id="rush">                          <!-- 对应执行的方法，注意，使用insert语句就要用<insert></insert>  -->
+        select * from Goods
+    </select>
+</mapper>

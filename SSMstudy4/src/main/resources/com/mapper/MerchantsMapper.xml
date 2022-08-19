@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.MerchantsMapper">                 <!-- 查询的结果返回给MerchantsMapper中的login方法  -->
+    <select id="login" resultType="com.entity.Merchants">          <!-- 指定返回的类型为Merchants  -->
+        select * from Merchants where name=#{name} AND password=#{password}       <!--@Param("name")指定参数名字为name，在使用sql语句时可以用name作占位符，否则会报错  -->
+    </select>
+
+
+
+</mapper>

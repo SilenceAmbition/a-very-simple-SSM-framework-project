@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!-- 未解决问题：1.样式单独写出来 2.-->
+<head>
+    <meta charset="UTF-8">
+    <title>随易网！随意交易！</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>   <!-- 导入jQuery-->
+    <script type="text/javascript">
+        /*window.onload=function(){           //当html加载结束就会执行这个js  方法一
+            alert("123");
+            var m = document.getElementById("in").value;
+            alert(m);
+        }*/
+        $(document).ready(function(){       //jQuery 当html加载结束就会执行这个js  方法二
+            var m = document.getElementById("in").value;//根据id获得HTML中的对象的value值
+            var m2=m.slice(1,m.length-1)          //去除两端的[]
+            var n=m2.split(" ");                      //将字符串按空格分割成一个字符串数组
+            var tab=document.getElementById("tab");//获得table
+            var i=0;
+            while(n[i]!=undefined){             //这个for循环实现在table中添加多行数据，循环添加写入数据
+                var tabRows = tab.rows;                 //获得table现在的行数
+                var newTr = tab.insertRow(tabRows.length);//在现有行数后面新增一行
+                newTr.style.backgroundColor="rgba(0, 128, 0, 0.1)";//设置样式
+                newTr.style.fontSize="15px";
+                for(var j=0;j<5;j++){                   //这个for循环实现在在一行中添加多个单元格数据，循环添加写入数据
+                    if(n[i+j]!=undefined){          //undefined表示未定义的数据
+                        if(j==0){
+                            var newTd = newTr.insertCell(j);        //插入第j个单元格
+                            newTd.style.textIndent="10px";
+                            newTd.innerHTML=n[i+j];
+                        }else if(j==4){
+                        n[i+j]=n[i+j].replace(',',"");//replace替换指定字符串，但不改变原字符串数组
+                            var newTd = newTr.insertCell(j);
+                            newTd.style.textIndent="50px";
+                            tdA = document.createElement('a');
+                            tdA.innerHTML=n[i+j];
+                            //tdA.href = '/MybatisGrade/MidPages/Talk';
+                            newTd.appendChild(tdA);
+                        }else{
+                            var newTd = newTr.insertCell(j);
+                            newTd.style.textIndent="50px";
+                            newTd.innerHTML=n[i+j];}
+                    }
+                }
+                i=i+j;
+            }
+        });
+    </script>
+</head>
+<body>                             <!--所有样式要在style内设置，或者写css -->
+
+    <table>
+        <tr>
+            <td style="font-size:15px" >当前时间：2022年7月</td>
+            <td style="text-indent:1500px;font-size:15px">
+                <a th:href="@{/HomePages/UserLogin}" target="_blank">用户中心</a></td>  <!--加花括号和th是因为这里的地址是从浏览器端访问，路径要变一下 -->
+            <td style="text-indent:40px;font-size:15px"><a th:href="@{/HomePages/MerchantLogin}" target="_blank">商家中心</a></td>    <!-- text-indent左缩进-->
+        </tr>
+    </table><br><br><br>
+    <table align="center" cellspacing="20">                                         <!--cellspacing是table的属性-->
+        <tr>
+            <td style="font-size:50px;color:rgb(60, 179, 113);">随易网！</td>       <!--tr是table中的一行，但单独的tr并不能使用，要加上td或者th-->
+            <td>
+                <form style="border: 2px solid rgb(60, 179, 113);border-radius: 5px;width:639px">  <!--边界要先设置成solid才可以设置颜色-->
+                        <select style="height:40px;vertical-align:middle;border: 0px;padding-left:6px;padding-right:5px;font-size:18px"><option>商品</option><option>店铺</option></select>
+                        <input type="text" style="width:500px;height:30px;vertical-align:middle;border: 0px;font-size:18px">
+                        <button style="height:30px;vertical-align:middle;border: 1px solid rgb(60, 179, 113);border-radius: 3px;font-size:18px;background-color:rgb(190, 251, 190)">搜索</button>
+                </form>                                                             <!-- vertical-align一行中垂直方向的对齐-->
+            </td>
+        </tr>
+    </table><br><br><br><br>
+<input type="hidden" th:value="${session.goodsList}" id="in"> <!-- 获得数据  session.goodsList等于session.goodsList.toString()-->
+    <table style="" align="center" cellpadding="10" width="1200" id="tab">
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.3)">
+            <td style="text-indent:10px"></td>
+            <td style="text-indent:50px"><a th:href="@{/}">综合排序</a></td>
+            <td style="text-indent:50px"><a th:href="@{/HomePages/merchantNameSort}">按商家名称排序</a></td>
+            <td style="text-indent:50px"><a th:href="@{/HomePages/goodsNameSort}">按商品名称排序</a></td>
+            <td style="text-indent:50px"><a th:href="@{/HomePages/VisitsSort}">按访问总量排序</a></td>
+        </tr>
+        <!--<tr><td>&nbsp</td></tr> -->                                           <!--&nbsp表示一个空格-->
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.2)">
+            <td style="text-indent:10px">序号</td>
+            <td style="text-indent:50px">名称</td>
+            <td style="text-indent:50px">价格</td>
+            <td style="text-indent:50px">余量</td>
+            <td style="text-indent:50px">商家</td>
+        </tr>
+    </table>
+</body>
+</html>

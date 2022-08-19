@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!-- 未解决问题：1.样式单独写出来 2.-->
+<head>
+    <meta charset="UTF-8">
+    <title>随易网！随意交易！</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <style>
+    </style>
+</head>
+<body>                                                                                  <!--所有样式要在style内设置，或者写css -->
+    <table>
+        <tr>
+            <td style="font-size:15px" >当前时间：2022年7月</td>
+            <td style="text-indent:1500px;font-size:15px">
+                <a th:href="@{/HomePages/UserLogin}" target="_blank">用户中心</a></td>  <!--加花括号和th是因为这里的地址是从浏览器端访问，路径要变一下 -->
+            <td style="text-indent:40px;font-size:15px"><a th:href="@{/HomePages/MerchantLogin}" target="_blank">商家中心</a></td>    <!-- text-indent左缩进-->
+        </tr>
+    </table><br><br><br>
+
+
+    <table align="center" cellspacing="20">                                         <!--cellspacing是table的属性-->
+        <tr>
+            <td style="font-size:50px;color:rgb(60, 179, 113);">随易网！</td>       <!--tr是table中的一行，但单独的tr并不能使用，要加上td或者th-->
+            <td>
+                <form style="border: 2px solid rgb(60, 179, 113);border-radius: 5px;width:639px">  <!--边界要先设置成solid才可以设置颜色-->
+                        <select style="height:40px;vertical-align:middle;border: 0px;padding-left:6px;padding-right:5px;font-size:18px"><option>商品</option><option>店铺</option></select>
+                        <input type="text" style="width:500px;height:30px;vertical-align:middle;border: 0px;font-size:18px">
+                        <button style="height:30px;vertical-align:middle;border: 1px solid rgb(60, 179, 113);border-radius: 3px;font-size:18px;background-color:rgb(190, 251, 190)">搜索</button>
+                </form>                                                             <!-- vertical-align一行中垂直方向的对齐-->
+            </td>
+        </tr>
+    </table><br><br><br><br><br><br>
+
+
+    <table style="" align="center" cellpadding="10" width="1000">
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.2)">
+            <td style="text-indent:10px">综合排序</td>
+            <td style="text-indent:50px">按商家名称排序</td>
+            <td style="text-indent:50px">按商品名称排序</td>
+            <td style="text-indent:50px">按访问总量排序</td>
+        </tr>
+        <!--<tr><td>&nbsp</td></tr> -->                                           <!--&nbsp表示一个空格-->
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.1)">
+            <td style="text-indent:10px">名称</td>
+            <td style="text-indent:50px">价格</td>
+            <td style="text-indent:50px">余量</td>
+            <td style="text-indent:50px">商家</td>
+        </tr>
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.1)">
+            <td style="text-indent:10px">辣椒</td>
+            <td style="text-indent:50px">1元/斤</td>
+            <td style="text-indent:50px">80斤</td>
+            <td style="text-indent:50px">老王</td>
+        </tr>
+    </table>
+</body>
+</html>

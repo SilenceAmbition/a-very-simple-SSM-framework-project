@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>反馈中心</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script type="text/javascript">
+        function text1(){
+            var tab=document.getElementById("tab");//获得table
+            var tabRows = tab.rows;                 //获得table现在的行数
+            var newTr = tab.insertRow(tabRows.length);//在现有行数后面新增一行
+            var newTd = newTr.insertCell(0);
+            newTd.innerHTML="123";
+            var newTd2 = newTr.insertCell(1);
+            var price = document.createElement("input");
+            newTd2.appendChild(price);
+            newTd.parentNode.childNodes[0].innerHTML;            //写入数据
+
+            alert(newTd.parentNode.childNodes[0].innerHTML);
+        }
+
+    </script>
+</head>
+<body>
+    <table style="" align="center" cellpadding="10" width="1200" id="tab">
+        <tr style="font-size:15px;background: rgba(0, 128, 0, 0.25)">
+            <td style="text-indent:10px">序号</td>
+            <td style="text-indent:50px">名称</td>
+            <td style="text-indent:50px">价格</td>
+            <td style="text-indent:50px" id="12">余量</td>
+            <td style="text-indent:50px">商家</td>
+            <td></td><td></td>
+        </tr>
+    </table>
+    <input type="hidden" th:value="${session.merchantName}" id="merchantName">
+    <input type="button" onclick="text1()" value="按钮">
+</body>
+</html>

@@ -1,0 +1,39 @@
+未完成项目：idea社区版不支持单独的JavaScript和css文件，所以这些代码都写在html中	一个阶段对应一个项目  
+项目目的：一个网站,页面分为1.游客页面 2.商家页面 3.后端数据管理页面 4.商品页面     项目只完成了部分功能，其他功能的实现大同小异
+实现游客交易功能(包括和商家私聊)，商家上架货物和用户交易(私聊)，//项目没有完成此功能
+网站简单，注重功能的实现
+
+数据的流向：html中form表单提交数据---》在controller层中对应的方法可以获得数据(输入框的name的值要和方法的参数名一致，href/action中的内容要和@RequestMapping的内容一致）
+---》通过在controller方法中调用service层方法将数据传输到service层----》service层调用dao层方法将数据传输到dao层（通过@Param("price")定义参数名字）
+----》映射文件可以通过#{price}获得数据用于sql中 ----》映射文件通过namespace和id指定接口的方法(dao层)接收返回的结果集
+----》service层调用dao层方法接收数据，controller层调用service层的方法获得数据(依然是前面的那个方法)
+----》controller层相应方法使用session将数据写入会话 ----》html可以从session会话中获得数据
+
+第一步：配置环境，创建maven项目，配置tomcat(网上搜索教程即可，环境变量什么的)，导入所需的依赖 ，
+第一阶段.使用mybatis实现操作数据库    目的：能够在test类中实现对数据库的操作		接口和对应的mapper映射文件的包名和文件名要一样
+1.Java.com下创建两个目录写实体类和对应的接口，2.在resource.com.mapper下创建对应的映射文件  3.在resource下创建mybatis配置文件
+一个表对应一个实体类对应一个接口对应一个映射文件(mapper)
+xml文件都创建在resource目录下		
+1.先使用maven导入相关依赖
+2.配置数据库连接池，连接数据库  写mybatis配置
+2.根据数据库写相应实体类
+3.写相关接口(一个表一个接口，用于对应执行sql语句=写抽象方法，对数据库的操作)
+4.写对应mapper(一个接口一个mapper，是xml文件，=写sql语句，实现抽象方法)
+大多数内容复制即可，有注释的地方是需要改动的地方		大多数内容复制即可，有注释的地方是需要改动的地方    大多数内容复制即可，有注释的地方是需要改动的地方
+
+第二阶段.写web相关  用springmvc实现网页，目的：并且能够用 controller类实现页面的跳转，并获得前端传来的数据
+1.在main下创建目录webapp.web-inf二级目录，在目录下写网页  2.在web-inf下创建web.xml文件  3.在resource下创建springmvc.xml文件 
+4.Java.com下创建controller目录，用于写控制类，用于实现页面的跳转，响应前端发来的请求，并向后端发送请求（类中一个方法等于一个请求，从打开首页开始(打开首页也要创建一个方法打开首页)）
+
+第三阶段：使用spring    目的：处理前端传来的数据并向前端响应    1.删除第一阶段写的mybatis配置文件，新创建一个配置文件，因为spring配置文件包括了mybatis配置文件的内容
+2..Java.com创建service目录，用于写类调用接口中的方法，类中一个方法对应接口中的一个方法，这个方法提供给controller层调用
+3.controller中方法的参数和输入框的name属性的值保持一致后端就可以拿到前端的数据了
+4.第一阶段中映射文件中的namespace和id的值就是sql语句查询结果返回的地方（返回到dao层接口相应的方法）
+5.controller方法中的session就是将数据发送到前端，前端有三种方法拿到数据  1.在html中用${session.message}    2.在jsp中用<%=session.getAttribute("message")%>  3.用js用AJAX获取 (我不会AJAX) 
+由于html页面是静态的，想先在html中获取到session中的值再让js从html中获取session值是行不通的。因为html页面在加载时session中还没有数据，提交表单后才有，而提交表单后就无法再加载html页面了
+.麻烦一点的解决方法：创建一个间接的页面，用于表示登入成功，第一个登入页面已经将数据写入到session，所以第二个页面直接获取session中的值即可
+
+第四阶段：js，HTML和sql语句的使用   访问https://www.w3school.com.cn   查看js的用法即可完成
+完成对数据的增删改查
+
+
